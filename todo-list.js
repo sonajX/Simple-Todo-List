@@ -1,14 +1,23 @@
-const todoList = [
-  {
-    name: 'Wash dish',
-    dueDate: '2022-12-22'
-  }, 
-  {
-    name: 'Run',
-    dueDate: '2023-03-23'
-  }
-];
+let todoList = JSON.parse(localStorage.getItem('todoList'));
+
+if(!todoList) {
+  todoList = [
+    {
+      name: 'Wash dish',
+      dueDate: '2022-12-22'
+    }, 
+    {
+      name: 'Run',
+      dueDate: '2023-03-23'
+    }
+  ];
+}
 console.log(todoList);
+
+function saveToStorage() {
+  localStorage.setItem('todoList', JSON.stringify(todoList));
+}
+
 renderTodoList();
 
 //generating the html
@@ -25,9 +34,8 @@ function renderTodoList() {
         ${dueDate}
       </div>
       <button onclick="
-        todoList.splice(${i}, 1);
-        renderTodoList();"
-        class="delete-todo-button">Delete</button>
+          deleteTodo(${i});
+        " class="delete-todo-button">Delete</button>
     `;
     todoListHTML += html;
   }
@@ -62,6 +70,13 @@ function addTodo(){
   console.log(todoList);
   //clear the value in the text box
   nameInputElement.value = '';
+  saveToStorage();
+  renderTodoList();
+}
+
+function deleteTodo(i){
+  todoList.splice(i, 1);
+  saveToStorage();
   renderTodoList();
 }
 
